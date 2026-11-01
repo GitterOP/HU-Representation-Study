@@ -1,0 +1,18 @@
+{
+    "Dataset": "Jasper Ridge",
+    "Method_DimRed": "AE_PATCH",
+    "Method_Unmixing": "FCLS",
+    "Metrics": {
+        "aRMSE": 0.21078808883132374,
+        "rRMSE": 0.07753240602647661,
+        "SAM": 11.873624731905682,
+        "mSAD": 21.061596647017133,
+        "mSID": 0.25545175012964916,
+        "ERGAS": 37.817038851481136,
+        "Latent_Dist_Mean": 4.077184200286865,
+        "Simplex_Volume_Diff": 1.4152517895466357
+    },
+    "Performance": {
+        "Time_Total": 20.53970432281494
+    }
+}

@@ -1,0 +1,70 @@
+verbose: 1  # 0: solo barras de progreso (tqdm), 1: prints actuales detallados
+
+dataset:
+  names: ["Samson","Urban","Jasper Ridge"]
+  path: "data"
+  estimate_n_endmembers: false
+
+# Ground-truth datasets (Y, M, A) used by GroundTruthDataset loader.
+# To add a new dataset: add an entry here — no Python changes needed.
+# image_path : .mat file containing the hyperspectral image (Y)
+# gt_path    : .mat file containing endmembers (M) and abundances (A)
+# mat_keys   : actual variable names inside the .mat files
+#   Y : key for the image array
+#   M : key for endmembers  (use null if not available)
+#   A : key for abundances  (use null if not available)
+# shape      : declared dimensions for shape validation
+datasets:
+  jasper:
+    name: 'Jasper Ridge'
+    image_path: 'data/jasper/jasperRidge2_R198.mat'
+    gt_path: 'data/jasper/end4.mat'
+    mat_keys:
+      Y: 'Y'
+      M: 'M'
+      A: 'A'
+    shape:
+      rows: 100
+      cols: 100
+      bands: 198
+      materials: 4
+
+  urban:
+    name: 'Urban'
+    image_path: 'data/urban/Urban_R162.mat'
+    gt_path: 'data/urban/end4_groundTruth.mat'
+    mat_keys:
+      Y: 'Y'
+      M: 'M'
+      A: 'A'
+    shape:
+      rows: 307
+      cols: 307
+      bands: 162
+      materials: 4
+
+  samson:
+    name: 'Samson'
+    image_path: 'data/samson/samson_1.mat'
+    gt_path: 'data/samson/end3.mat'
+    mat_keys:
+      Y: 'V'      # Samson uses 'V' instead of 'Y'
+      M: 'M'
+      A: 'A'
+    shape:
+      rows: 95
+      cols: 95
+      bands: 156
+      materials: 3
+
+dimensionality_reduction:
+  methods: ["PCA", "AE", "AE_PATCH", "VIT", "MAE", "DINO"]  # "PCA", "AE", "AE_PATCH", "VIT", "MAE", "DINO"
+  device: "GPU"  # "CPU" o "GPU"
+  epochs: 200    # Límite máximo universal para Deep Learning (Early Stopping detendrá antes si es necesario)
+  patience: 25
+
+unmixing:
+  # Opciones: 'FCLS'
+  method: "FCLS"
+  nfindr_maxit: 20
+  fcls_iterations: 15

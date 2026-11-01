@@ -1,0 +1,18 @@
+{
+    "Dataset": "Urban",
+    "Method_DimRed": "DINO",
+    "Method_Unmixing": "FCLS",
+    "Metrics": {
+        "aRMSE": 0.16856326617178954,
+        "rRMSE": 0.10073260040446044,
+        "SAM": 4.412462525421929,
+        "mSAD": 6.943475127077109,
+        "mSID": 0.02501656990413587,
+        "ERGAS": 68.01120804486708,
+        "Latent_Dist_Mean": 4.157186508178711,
+        "Simplex_Volume_Diff": 367.7345035881733
+    },
+    "Performance": {
+        "Time_Total": 53.70403003692627
+    }
+}

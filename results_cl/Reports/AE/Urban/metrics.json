@@ -1,0 +1,18 @@
+{
+    "Dataset": "Urban",
+    "Method_DimRed": "AE",
+    "Method_Unmixing": "FCLS",
+    "Metrics": {
+        "aRMSE": 0.28301649291881087,
+        "rRMSE": 0.21664762026828038,
+        "SAM": 7.6781629649696,
+        "mSAD": 23.472637919118515,
+        "mSID": 1.7977198648426695,
+        "ERGAS": 149.11587105748828,
+        "Latent_Dist_Mean": 2.1097681522369385,
+        "Simplex_Volume_Diff": 3.0068767856592773
+    },
+    "Performance": {
+        "Time_Total": 79.11180067062378
+    }
+}

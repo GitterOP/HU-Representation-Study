@@ -1,0 +1,18 @@
+{
+    "Dataset": "Urban",
+    "Method_DimRed": "PCA",
+    "Method_Unmixing": "FCLS",
+    "Metrics": {
+        "aRMSE": 0.2542779309532363,
+        "rRMSE": 0.28944368277539356,
+        "SAM": 7.023406572398565,
+        "mSAD": 25.57450404490968,
+        "mSID": 1.2691705458204754,
+        "ERGAS": 200.86073168005467,
+        "Latent_Dist_Mean": 7.457953699732456,
+        "Simplex_Volume_Diff": 137.2494780812627
+    },
+    "Performance": {
+        "Time_Total": 2.8625552654266357
+    }
+}

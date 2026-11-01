@@ -1,0 +1,18 @@
+{
+    "Dataset": "Jasper Ridge",
+    "Method_DimRed": "DINO",
+    "Method_Unmixing": "FCLS",
+    "Metrics": {
+        "aRMSE": 0.32391580948431153,
+        "rRMSE": 0.11160461878075036,
+        "SAM": 8.030752253781994,
+        "mSAD": 19.720027265647303,
+        "mSID": 0.23229162215453214,
+        "ERGAS": 49.09810765751004,
+        "Latent_Dist_Mean": 11.861553192138672,
+        "Simplex_Volume_Diff": 711.0070080802984
+    },
+    "Performance": {
+        "Time_Total": 24.635981559753418
+    }
+}

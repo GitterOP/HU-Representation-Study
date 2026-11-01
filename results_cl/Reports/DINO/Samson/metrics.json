@@ -1,0 +1,18 @@
+{
+    "Dataset": "Samson",
+    "Method_DimRed": "DINO",
+    "Method_Unmixing": "FCLS",
+    "Metrics": {
+        "aRMSE": 0.06953729872676671,
+        "rRMSE": 0.09949281681806932,
+        "SAM": 3.2475734734512702,
+        "mSAD": 4.269439622754997,
+        "mSID": 0.015710782806691474,
+        "ERGAS": 54.671239072658075,
+        "Latent_Dist_Mean": 2.673396110534668,
+        "Simplex_Volume_Diff": 29.40532283443099
+    },
+    "Performance": {
+        "Time_Total": 25.83777403831482
+    }
+}

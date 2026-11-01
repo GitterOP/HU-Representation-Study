@@ -1,0 +1,18 @@
+{
+    "Dataset": "Samson",
+    "Method_DimRed": "AE_PATCH",
+    "Method_Unmixing": "FCLS",
+    "Metrics": {
+        "aRMSE": 0.08688683198617292,
+        "rRMSE": 0.14819478760385532,
+        "SAM": 3.59353896369831,
+        "mSAD": 2.788932565049892,
+        "mSID": 0.005542812636966477,
+        "ERGAS": 72.26444833496831,
+        "Latent_Dist_Mean": 6.820684909820557,
+        "Simplex_Volume_Diff": 96.85384864191019
+    },
+    "Performance": {
+        "Time_Total": 17.18082571029663
+    }
+}
