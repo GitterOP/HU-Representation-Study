@@ -45,7 +45,7 @@ DATASETS = [
 ]
 
 METHODS = ['PCA', 'AE', 'AE_PATCH', 'VIT', 'MAE', 'DINO']
-METHOD_LABELS = {'VIT': 'ViT'}
+METHOD_LABELS = {'AE_PATCH': 'AE-Patch', 'VIT': 'ViT'}
 LETTERS = ['(a)', '(b)', '(c)', '(d)', '(e)', '(f)']
 
 

@@ -52,7 +52,7 @@ LINE_STYLES = {
 METHOD_LABELS = {
     'PCA': 'PCA',
     'AE': 'AE',
-    'AE_PATCH': 'AE_PATCH',
+    'AE_PATCH': 'AE-Patch',
     'VIT': 'ViT',
     'MAE': 'MAE',
     'DINO': 'DINO'
