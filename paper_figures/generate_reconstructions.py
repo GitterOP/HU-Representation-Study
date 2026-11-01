@@ -45,6 +45,7 @@ DATASETS = [
 ]
 
 METHODS = ['PCA', 'AE', 'AE_PATCH', 'VIT', 'MAE', 'DINO']
+METHOD_LABELS = {'VIT': 'ViT'}
 LETTERS = ['(a)', '(b)', '(c)', '(d)', '(e)', '(f)']
 
 
@@ -154,6 +155,7 @@ def generate_reconstruction_maps():
         for idx, method in enumerate(METHODS):
             ax = axes[idx]
             letter = LETTERS[idx]
+            method_label = METHOD_LABELS.get(method, method)
             m_data = cached_data[csv_name].get(method)
 
             if m_data is not None:
@@ -164,7 +166,7 @@ def generate_reconstruction_maps():
                 im = ax.imshow(error_map, cmap='turbo', vmin=0.0, vmax=global_max_error)
                 ax.axis('off')
                 ax.set_title(
-                    f"{letter} {method} (RMSE: {rmse_val:.4f})",
+                    f"{letter} {method_label} (rRMSE: {rmse_val:.4f})",
                     fontsize=12,
                     fontweight='bold',
                     color=COLORS[method],
@@ -175,17 +177,17 @@ def generate_reconstruction_maps():
                 cax = divider.append_axes("right", size="4.5%", pad=0.08)
                 cbar = fig.colorbar(im, cax=cax)
                 cbar.ax.tick_params(labelsize=8)
-                cbar.set_label('RMSE', fontsize=9, labelpad=4)
+                cbar.set_label('Pixelwise RMSE', fontsize=9, labelpad=4)
             else:
                 ax.axis('off')
                 ax.text(
                     0.5, 0.5,
-                    f"{letter} {method}\n[Datos no disponibles]",
+                    f"{letter} {method_label}\nData unavailable",
                     ha='center', va='center',
                     fontsize=11, color='#888888', fontweight='semibold'
                 )
                 ax.set_title(
-                    f"{letter} {method}",
+                    f"{letter} {method_label}",
                     fontsize=12,
                     fontweight='bold',
                     color='#888888',

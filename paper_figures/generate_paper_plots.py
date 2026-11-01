@@ -102,7 +102,7 @@ def generate_heatmap(df):
     ax.set_yticklabels([METHOD_LABELS.get(m, m) for m in pivot_df.index], fontweight='semibold')
 
     cbar = ax.figure.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
-    cbar.ax.set_ylabel('rRMSE', rotation=-90, va="bottom", fontweight='semibold')
+    cbar.ax.set_ylabel('Reconstruction RMSE (rRMSE)', rotation=-90, va="bottom", fontweight='semibold')
     cbar.ax.tick_params(labelsize=8.5)
 
     for i in range(len(pivot_df.index)):
@@ -190,8 +190,8 @@ def generate_efficiency_frontier(df):
     )
 
     ax.set_xscale('log')
-    ax.set_xlabel('Total Execution Time (s)', fontweight='semibold')
-    ax.set_ylabel('rRMSE', fontweight='semibold')
+    ax.set_xlabel('Total execution time (s)', fontweight='semibold')
+    ax.set_ylabel('Reconstruction RMSE (rRMSE)', fontweight='semibold')
 
     # Sin título (para el paper IEEE)
     plt.tight_layout()
@@ -223,7 +223,7 @@ def generate_endmember_plots(config):
             for j in range(n_ref):
                 ref_sig = references[j]
                 ref_max = np.max(ref_sig) if np.max(ref_sig) > 0 else 1.0
-                axes[j].plot(ref_sig / ref_max, label='Ground Truth', color='#0f172a', linestyle='--', linewidth=2.0, zorder=5)
+                axes[j].plot(ref_sig / ref_max, label='Ground truth', color='#0f172a', linestyle='--', linewidth=2.0, zorder=5)
 
             for method in METHODS_ORDER:
                 color = COLORS[method]
@@ -264,7 +264,7 @@ def generate_endmember_plots(config):
                     linestyle = LINE_STYLES.get(method, '-')
                     axes[j].plot(
                         ext_sig / ext_max,
-                        label=f"{disp_label} ({sad_deg:.1f}°)",
+                        label=f"{disp_label} (SAD: {sad_deg:.1f}°)",
                         color=color,
                         linestyle=linestyle,
                         linewidth=1.3,
@@ -273,9 +273,9 @@ def generate_endmember_plots(config):
 
             for j in range(n_ref):
                 axes[j].set_title(mat_names[j], fontsize=11, fontweight='bold', pad=8)
-                axes[j].set_xlabel('Spectral Band', fontsize=9.5)
+                axes[j].set_xlabel('Spectral band index', fontsize=9.5)
                 if j == 0:
-                    axes[j].set_ylabel('Normalized Reflectance', fontsize=9.5)
+                    axes[j].set_ylabel('Normalized reflectance', fontsize=9.5)
                 axes[j].legend(loc='upper right', frameon=True, facecolor='white', framealpha=0.92, edgecolor='#e2e8f0', fontsize=8.0)
                 axes[j].tick_params(axis='both', which='major', labelsize=8.5)
                 axes[j].grid(True, alpha=0.25)
