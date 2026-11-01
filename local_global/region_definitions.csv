@@ -1,0 +1,45 @@
+dataset,region,pixels,fraction,depends_on_method,is_primary
+Samson,all,9025,1.0,False,True
+Samson,boundary_r0,1403,0.15545706371191137,False,False
+Samson,boundary_r1,2910,0.3224376731301939,False,True
+Samson,boundary_r2,3919,0.4342382271468144,False,False
+Samson,mixed_t070,2443,0.2706925207756233,False,False
+Samson,mixed_t080,3455,0.3828254847645429,False,True
+Samson,mixed_t090,4897,0.5426038781163435,False,False
+Samson,critical,3877,0.429584487534626,False,True
+Samson,noncritical,5148,0.5704155124653739,False,False
+Samson,pure_interior,4021,0.44554016620498615,False,True
+Samson,low_signal,905,0.10027700831024931,False,False
+Samson,material_soil,3015,0.33407202216066484,False,False
+Samson,material_tree,3666,0.4062049861495845,False,False
+Samson,material_water,2344,0.2597229916897507,False,False
+Jasper Ridge,all,10000,1.0,False,True
+Jasper Ridge,boundary_r0,3267,0.3267,False,False
+Jasper Ridge,boundary_r1,5709,0.5709,False,True
+Jasper Ridge,boundary_r2,6862,0.6862,False,False
+Jasper Ridge,mixed_t070,3041,0.3041,False,False
+Jasper Ridge,mixed_t080,4147,0.4147,False,True
+Jasper Ridge,mixed_t090,5868,0.5868,False,False
+Jasper Ridge,critical,6070,0.607,False,True
+Jasper Ridge,noncritical,3930,0.393,False,False
+Jasper Ridge,pure_interior,2957,0.2957,False,True
+Jasper Ridge,low_signal,1000,0.1,False,False
+Jasper Ridge,material_tree,3493,0.3493,False,False
+Jasper Ridge,material_water,3326,0.3326,False,False
+Jasper Ridge,material_soil,2428,0.2428,False,False
+Jasper Ridge,material_road,753,0.0753,False,False
+Urban,all,94249,1.0,False,True
+Urban,boundary_r0,38337,0.4067629364767796,False,False
+Urban,boundary_r1,65553,0.6955299260469607,False,True
+Urban,boundary_r2,76892,0.8158388948423856,False,False
+Urban,mixed_t070,42816,0.45428598711922674,False,False
+Urban,mixed_t080,58972,0.6257042515039948,False,True
+Urban,mixed_t090,72559,0.7698649322539232,False,False
+Urban,critical,76770,0.8145444514000149,False,True
+Urban,noncritical,17479,0.18545554859998514,False,False
+Urban,pure_interior,11159,0.11839913420832052,False,True
+Urban,low_signal,9425,0.10000106101921506,False,False
+Urban,material_asphalt,29954,0.31781769567846874,False,False
+Urban,material_grass,32328,0.3430062918439453,False,False
+Urban,material_tree,24805,0.2631858162951331,False,False
+Urban,material_roof,7162,0.07599019618245287,False,False

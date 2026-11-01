@@ -1,0 +1,5 @@
+# Regenerated visual and spatial artifacts; numerical evidence is versioned.
+*.png
+*.pdf
+reference_masks_*.npz
+__pycache__/

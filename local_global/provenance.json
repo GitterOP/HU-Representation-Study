@@ -1,0 +1,74 @@
+{
+  "analysis_script_sha256": "717ac669ceaac642692d359ebc81151f58ccae17366bb6cc6c892343539a6c4d",
+  "input_files": {
+    "config.yaml": "6dbf86e7da519d5f1871d9ae4ff51e0560263d60306527bf8ef585041cb7a9d0",
+    "data/jasper/end4.mat": "92f5697b43705802b904fd13ba99b6ce65a3d203682864abc3fbec922beec374",
+    "data/jasper/jasperRidge2_R198.mat": "0e4118a6452f6044978a8ca3762fb0f791115467904936d463c4e111e56e682e",
+    "data/samson/end3.mat": "ce768182ce5292390180f827ff5769112cf3d299f4e64ab43e950a310b7ec9fa",
+    "data/samson/samson_1.mat": "1ebacaf7cd32bfc31c0ee3fd56c63a7f29a434893a8b45705fb59cd8a0c8beb6",
+    "data/urban/Urban_R162.mat": "aa8fb6d46ad229dee1a77ebaffea8f1d6a88cec80ebb101cd1975fb54cda9862",
+    "data/urban/end4_groundTruth.mat": "23460f3d4fd4523e2221c8f1895b0bedf0814e88a5a50b1fc6e8e4a0e6b2b2d2",
+    "results_cl/Global_Summary/master_metrics.csv": "82f4b16318fa2452f87697c982fe93bdf777b77bda6e848025c899e436c500a7",
+    "results_cl/Unmixing/AE/Jasper Ridge/Jasper Ridge_FCLS_abundances.npy": "d9d112b8ad08d56db8dd977178fd0e1850d816c1f8fc5c99bca012679dc2750f",
+    "results_cl/Unmixing/AE/Jasper Ridge/Jasper Ridge_FCLS_endmembers.npy": "d8a34dc11d25cb6232d2e9c95bc8fdbab54fbdbd59bd22b53b26d61f149cfb96",
+    "results_cl/Unmixing/AE/Samson/Samson_FCLS_abundances.npy": "2510687940269daed76d0eed9fdbbaee330b410b49ffa9d8247d5a9877884529",
+    "results_cl/Unmixing/AE/Samson/Samson_FCLS_endmembers.npy": "ff8a7c519f0fd39d7f2dc9a67007ccc86cdc2e2f4ee41a0c085d8d13052f1b27",
+    "results_cl/Unmixing/AE/Urban/Urban_FCLS_abundances.npy": "42c3f0a06dceac3f81e8aa160042a8da9b9f1a74483a8e3301dd444396f33b16",
+    "results_cl/Unmixing/AE/Urban/Urban_FCLS_endmembers.npy": "4e43c21a342846c46c04633055756c6aa9dc172950252b1346e1a84fee142252",
+    "results_cl/Unmixing/AE_PATCH/Jasper Ridge/Jasper Ridge_FCLS_abundances.npy": "7aa0c08961f57b626f4007cd06e811deff1e60701051b0dd741866d9f5bfe1f0",
+    "results_cl/Unmixing/AE_PATCH/Jasper Ridge/Jasper Ridge_FCLS_endmembers.npy": "393c1d509e5931081c37a6d8de33812076f5641085fbe309ff5cf7540b7ef4fb",
+    "results_cl/Unmixing/AE_PATCH/Samson/Samson_FCLS_abundances.npy": "8972e695208afc186e0048e78acbaf41772ebea670b11ca5a6f7d05336288136",
+    "results_cl/Unmixing/AE_PATCH/Samson/Samson_FCLS_endmembers.npy": "0049dd49442a98ce2e558cc27c45e04eec8aab31d456bb75bca04537af82adef",
+    "results_cl/Unmixing/AE_PATCH/Urban/Urban_FCLS_abundances.npy": "d9d5364ef986cdb51edeeed2e6fda6f55e1e0916cf57dd7acc6fa374b8ed6f8b",
+    "results_cl/Unmixing/AE_PATCH/Urban/Urban_FCLS_endmembers.npy": "a335e5f73c1e56883920dd54baba4b5bbeaacba3f64d2b47ffc722044bfeefb8",
+    "results_cl/Unmixing/DINO/Jasper Ridge/Jasper Ridge_FCLS_abundances.npy": "743b0016846e08856d37a0cbb6f8f63008596941edd17e684b050476898834c6",
+    "results_cl/Unmixing/DINO/Jasper Ridge/Jasper Ridge_FCLS_endmembers.npy": "8c87c102d57542befd8b2a7453af9192f2cfc660d135feb64ac18761550a13f9",
+    "results_cl/Unmixing/DINO/Samson/Samson_FCLS_abundances.npy": "d1faf69a23f78d9a1800ae54e2c676914c716d396977ffbc0bfa405850e0530f",
+    "results_cl/Unmixing/DINO/Samson/Samson_FCLS_endmembers.npy": "7beb3da0f7f8adaa442a785137eb7540cd3ec18bf00bd241148facbde3e42b5b",
+    "results_cl/Unmixing/DINO/Urban/Urban_FCLS_abundances.npy": "db26bd974ff514c2fa09f37c564455295a12f9b10e943cc4d607b924f2714ba1",
+    "results_cl/Unmixing/DINO/Urban/Urban_FCLS_endmembers.npy": "5ad45aa27161e5579dda7d447c803d3dbdf23d77de9a89727938ba792d49168a",
+    "results_cl/Unmixing/MAE/Jasper Ridge/Jasper Ridge_FCLS_abundances.npy": "825e11cae94240511444c420af86415d0ad321ba365979d86b4b5206ff691c4b",
+    "results_cl/Unmixing/MAE/Jasper Ridge/Jasper Ridge_FCLS_endmembers.npy": "f0c8716ac17c6d05f813b1263145dc838d5909e422da7a6d27d6d82371fc7905",
+    "results_cl/Unmixing/MAE/Samson/Samson_FCLS_abundances.npy": "c7cc09ed8a32f6ff7151ac6bfca1deedd6961857fc1b04b78262d7140fa429f3",
+    "results_cl/Unmixing/MAE/Samson/Samson_FCLS_endmembers.npy": "dbcd096dfcf45bd7dea64ce05a14ced732bcd6d95a095d567e02564f2478dc90",
+    "results_cl/Unmixing/MAE/Urban/Urban_FCLS_abundances.npy": "b12365526bfb75d665a86d1193961eb12e2c98ef0d661ff2aebd6051b1a54d84",
+    "results_cl/Unmixing/MAE/Urban/Urban_FCLS_endmembers.npy": "9c4285f98620d80c06938c42347a04bd33502ec14ea8fc46c47da31ab184cced",
+    "results_cl/Unmixing/PCA/Jasper Ridge/Jasper Ridge_FCLS_abundances.npy": "c821f079a297911826b79a483ee1021607d8f3d78d2061dec8542c9cf7e09522",
+    "results_cl/Unmixing/PCA/Jasper Ridge/Jasper Ridge_FCLS_endmembers.npy": "0ae85ea1475227684248467114a9bdebe9ecde7bb7ccc1cb94c26d8802b82870",
+    "results_cl/Unmixing/PCA/Samson/Samson_FCLS_abundances.npy": "2220d4b5fd003f6fb26d3857a54d7f32a0db61363e7236628b7b67c19cf737cc",
+    "results_cl/Unmixing/PCA/Samson/Samson_FCLS_endmembers.npy": "7d790763a328090a6f4c085abd3aa22d7ca68be20dbbcdfae02c5d77b6c088d3",
+    "results_cl/Unmixing/PCA/Urban/Urban_FCLS_abundances.npy": "993a95212d89c67e227ec77a78a6df602abb0c8ab14927b32ae4c63a67f85b6d",
+    "results_cl/Unmixing/PCA/Urban/Urban_FCLS_endmembers.npy": "65c4514e9ebbfc7971100e87454a833ae1f472123fe86976d547c06c3346b847",
+    "results_cl/Unmixing/VIT/Jasper Ridge/Jasper Ridge_FCLS_abundances.npy": "5a36a445b0329ee7d4b1395d9b5606701516fbe276c792125025531ab27c901f",
+    "results_cl/Unmixing/VIT/Jasper Ridge/Jasper Ridge_FCLS_endmembers.npy": "d3834aa4c02f21547abb411362ed2dd0542cc1859c98994f36b0f6e31cffec73",
+    "results_cl/Unmixing/VIT/Samson/Samson_FCLS_abundances.npy": "01350cc49819f3e4ae9ebc485e4987d473f9b77f61291a8d02bf75a76a320a28",
+    "results_cl/Unmixing/VIT/Samson/Samson_FCLS_endmembers.npy": "54c72f503e1d83602527255076be3811cfd2ed3ad1c9e32cdba8af62a11630c9",
+    "results_cl/Unmixing/VIT/Urban/Urban_FCLS_abundances.npy": "d54121af600ac59cdcf197f60cac8881653a1317cb5645d6b5bea3962870f3e8",
+    "results_cl/Unmixing/VIT/Urban/Urban_FCLS_endmembers.npy": "9c10aa70f82890d4a07effb9eee4868579c0d2195403c627b2848dafdf05e057"
+  },
+  "source_metric_checks": 72,
+  "source_metric_checks_passed": true,
+  "figure_scales": {
+    "reconstruction_color_limits": [
+      0,
+      0.6554128539897511
+    ],
+    "abundance_color_limits": [
+      0,
+      0.7071067811865476
+    ],
+    "rank_color_limits": [
+      1,
+      6
+    ],
+    "shared_across_methods_and_datasets": true
+  },
+  "versions": {
+    "python": "3.11.15",
+    "numpy": "2.4.6",
+    "pandas": "3.0.3",
+    "matplotlib": "3.10.8"
+  },
+  "protocol": "spec.md",
+  "no_training_or_parameter_selection": true
+}
