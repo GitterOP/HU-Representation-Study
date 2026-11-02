@@ -107,7 +107,7 @@ def load_dataset(ds_name, cfg_path='config.yaml'):
 def load_model_reconstruction_error(ds_name, method, original_cube):
     """
     Loads abundances and endmembers, computes linear cube reconstruction,
-    and calculates conventional pixelwise spectral RMSE (not relative RMSE).
+    and calculates pixelwise reconstruction RMSE (rRMSE; not relative RMSE).
     """
     rows, cols, bands = original_cube.shape
     p_ab = os.path.join(PROJECT_ROOT, f'results_cl/Unmixing/{method}/{ds_name}/{ds_name}_FCLS_abundances.npy')
@@ -210,13 +210,13 @@ def main():
         # -------------------------------------------------------------
         ax3 = axes[row_idx, 2]
         im3 = ax3.imshow(comp_err_crop, cmap='turbo', vmin=0, vmax=vmax)
-        comp_mean = float(np.mean(comp_err_crop))
-        ax3.set_title(f"{row_letters[row_idx]}3. {meta['comp_label']}\nMean pixel RMSE: {comp_mean:.3f}", fontweight='bold', pad=6)
+        comp_rrmse = float(np.sqrt(np.mean(comp_err_crop ** 2)))
+        ax3.set_title(f"{row_letters[row_idx]}3. {meta['comp_label']}\nROI rRMSE: {comp_rrmse:.3f}", fontweight='bold', pad=6)
         ax3.axis('off')
         divider3 = make_axes_locatable(ax3)
         cax3 = divider3.append_axes("right", size="5%", pad=0.08)
         cbar3 = plt.colorbar(im3, cax=cax3)
-        cbar3.set_label('Pixelwise RMSE', fontsize=8.5)
+        cbar3.set_label('Pixelwise rRMSE', fontsize=8.5)
         cbar3.ax.tick_params(labelsize=8)
 
         # -------------------------------------------------------------
@@ -224,14 +224,14 @@ def main():
         # -------------------------------------------------------------
         ax4 = axes[row_idx, 3]
         im4 = ax4.imshow(dino_err_crop, cmap='turbo', vmin=0, vmax=vmax)
-        dino_mean = float(np.mean(dino_err_crop))
+        dino_rrmse = float(np.sqrt(np.mean(dino_err_crop ** 2)))
 
-        ax4.set_title(f"{row_letters[row_idx]}4. DINO\nMean pixel RMSE: {dino_mean:.3f}", fontweight='bold', color='#047857', pad=6)
+        ax4.set_title(f"{row_letters[row_idx]}4. DINO\nROI rRMSE: {dino_rrmse:.3f}", fontweight='bold', color='#047857', pad=6)
         ax4.axis('off')
         divider4 = make_axes_locatable(ax4)
         cax4 = divider4.append_axes("right", size="5%", pad=0.08)
         cbar4 = plt.colorbar(im4, cax=cax4)
-        cbar4.set_label('Pixelwise RMSE', fontsize=8.5)
+        cbar4.set_label('Pixelwise rRMSE', fontsize=8.5)
         cbar4.ax.tick_params(labelsize=8)
 
     out_path = os.path.join(SCRIPT_DIR, 'fig_spatial_error_analysis.png')

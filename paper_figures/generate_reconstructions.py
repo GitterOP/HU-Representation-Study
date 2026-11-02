@@ -177,7 +177,7 @@ def generate_reconstruction_maps():
                 cax = divider.append_axes("right", size="4.5%", pad=0.08)
                 cbar = fig.colorbar(im, cax=cax)
                 cbar.ax.tick_params(labelsize=8)
-                cbar.set_label('Pixelwise RMSE', fontsize=9, labelpad=4)
+                cbar.set_label('Pixelwise rRMSE', fontsize=9, labelpad=4)
             else:
                 ax.axis('off')
                 ax.text(

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Summarize global reconstruction, material-region RMSE, and endmember SAD."""
+"""Summarize global reconstruction, material-region rRMSE, and endmember SAD."""
 import sys
 from pathlib import Path
 
@@ -93,8 +93,8 @@ def write_outputs(results, output):
     ax.set_xlim(-2.25, 5.75)
     ax.set_ylim(-1.0, 2.95)
     ax.axis('off')
-    ax.text(-0.25, 2.65, 'Scene / global RMSE winner', ha='right', weight='bold', fontsize=9.5)
-    ax.text(1.95, 2.65, 'Lowest local RMSE by dominant material', ha='center', weight='bold', fontsize=9.5)
+    ax.text(-0.25, 2.65, 'Scene / global rRMSE winner', ha='right', weight='bold', fontsize=9.5)
+    ax.text(1.95, 2.65, 'Lowest local rRMSE by dominant material', ha='center', weight='bold', fontsize=9.5)
     ax.text(4.95, 2.65, 'Lowest mean SAD', ha='center', weight='bold', fontsize=9.5)
     for index, row in enumerate(rows):
         y = 2 - index
@@ -114,7 +114,7 @@ def write_outputs(results, output):
         ax.text(4.60, y+0.10, row['spectral_winner'], va='center', fontsize=10.5)
         ax.text(4.60, y-0.16, '{mean_sad:.2f}°'.format(**row), va='center', fontsize=9.5, color='#475569')
     ax.add_patch(Rectangle((0, -0.85), 0.20, 0.16, fill=False, edgecolor='#0f172a', linewidth=2.2))
-    ax.text(0.32, -0.77, 'Bold outline: regional winner matches the global RMSE winner.',
+    ax.text(0.32, -0.77, 'Bold outline: regional winner matches the global rRMSE winner.',
             va='center', fontsize=9, color='#475569')
     fig.savefig(output / 'local_global_summary.png', dpi=300, bbox_inches='tight')
     plt.close(fig)
@@ -124,15 +124,15 @@ def write_outputs(results, output):
     local_example = ''
     if exceptions:
         row, region = exceptions[0]
-        local_example = ('In {}, {} leads globally, whereas {} achieves the lowest local RMSE '
+        local_example = ('In {}, {} leads globally, whereas {} achieves the lowest local rRMSE '
                          'in {}-dominant pixels. ').format(
                              row['dataset'], row['winner'], region['label'], region['material'].lower())
     differences = [row for row in rows if row['winner'] != row['spectral_winner']]
     if differences:
         example = ('In {dataset}, {spectral_winner} has the lowest mean endmember SAD, '
-                   'despite {winner} achieving the lowest global RMSE. ').format(**differences[0])
+                   'despite {winner} achieving the lowest global rRMSE. ').format(**differences[0])
     else:
-        example = 'Global RMSE and mean SAD winners coincide across these scenes. '
+        example = 'Global rRMSE and mean SAD winners coincide across these scenes. '
     paragraph = ('Figure~\\ref{fig:local_global_summary} contrasts scene-level reconstruction '
                  'with material-specific preservation. ' + local_example + example +
                  'Thus, global reconstruction quality alone does not establish uniform '
@@ -143,9 +143,9 @@ def write_outputs(results, output):
     \centering
     \includegraphics[width=\linewidth]{local_global/local_global_summary.png}
     \caption{Agreement between global reconstruction, local reconstruction, and endmember fidelity.
-    Each block names a material and the method attaining the lowest RMSE in its
+    Each block names a material and the method attaining the lowest rRMSE in its
     dominant ground-truth region. Bold outlines identify agreement with the global
-    RMSE winner. The right column reports the lowest mean endmember SAD.}
+    rRMSE winner. The prefix $r$ denotes reconstruction, not relative normalization. The right column reports the lowest mean endmember SAD.}
     \label{fig:local_global_summary}
 \end{figure}
 
@@ -163,10 +163,10 @@ def write_outputs(results, output):
         'Cada bloque identifica un material y su ganador local; el contorno grueso señala '
         'coincidencia con el ganador global. Los conteos se refieren a materiales, no píxeles; '
         'los empates locales también cuentan como coincidencias. '
-        'RMSE es convencional, aunque el resumen original lo denomina rRMSE. '
+        'rRMSE significa error de reconstrucción, no relativo; aRMSE se reserva para abundancias. '
         'SAD compara forma espectral. La revisión previa de escalas del GT sigue pendiente.\n\n'
         'Dependencias: NumPy, pandas, SciPy, PyYAML y Matplotlib. '
-        'El script verifica RMSE global y mSAD contra el resumen original.\n', encoding='utf-8')
+        'El script verifica rRMSE global y mSAD contra el resumen original.\n', encoding='utf-8')
 
 
 if __name__ == '__main__':

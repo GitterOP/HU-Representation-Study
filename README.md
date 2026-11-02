@@ -139,9 +139,10 @@ paragraph, and the small supporting `material_results.csv`.
 `paper_figures/`. Run the generators before compiling. Generated PNGs stay local;
 `paper_figures/Met.png` is tracked because it is a source diagram without a generator.
 
-The manuscript is a draft: its referenced `sample.bib` must be supplied. The
-historical CSV field `rRMSE` contains conventional reconstruction RMSE, so the
-manuscript's relative-RMSE equation still needs reconciliation before submission.
+The manuscript is a draft: its referenced `sample.bib` must be supplied.
+Throughout the paper, `rRMSE` means reconstruction RMSE, not relative RMSE.
+Full-cube, material-region, and ROI values use the same root-mean-square
+aggregation; `aRMSE` remains the separate abundance metric with its existing definition.
 
 ---
 

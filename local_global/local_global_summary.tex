@@ -4,10 +4,10 @@
     \centering
     \includegraphics[width=\linewidth]{local_global/local_global_summary.png}
     \caption{Agreement between global reconstruction, local reconstruction, and endmember fidelity.
-    Each block names a material and the method attaining the lowest RMSE in its
+    Each block names a material and the method attaining the lowest rRMSE in its
     dominant ground-truth region. Bold outlines identify agreement with the global
-    RMSE winner. The right column reports the lowest mean endmember SAD.}
+    rRMSE winner. The prefix $r$ denotes reconstruction, not relative normalization. The right column reports the lowest mean endmember SAD.}
     \label{fig:local_global_summary}
 \end{figure}
 
-Figure~\ref{fig:local_global_summary} contrasts scene-level reconstruction with material-specific preservation. In Urban, DINO leads globally, whereas AE-Patch achieves the lowest local RMSE in roof-dominant pixels. In Samson, AE-Patch has the lowest mean endmember SAD, despite DINO achieving the lowest global RMSE. Thus, global reconstruction quality alone does not establish uniform preservation of every material region and endmember.
+Figure~\ref{fig:local_global_summary} contrasts scene-level reconstruction with material-specific preservation. In Urban, DINO leads globally, whereas AE-Patch achieves the lowest local rRMSE in roof-dominant pixels. In Samson, AE-Patch has the lowest mean endmember SAD, despite DINO achieving the lowest global rRMSE. Thus, global reconstruction quality alone does not establish uniform preservation of every material region and endmember.
