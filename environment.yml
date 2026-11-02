@@ -9,6 +9,7 @@ dependencies:
   - scipy
   - pandas
   - matplotlib
+  - plotly
   - seaborn
   - pyyaml
   - scikit-learn

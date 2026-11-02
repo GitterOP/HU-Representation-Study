@@ -42,6 +42,7 @@ EMVisual-Paper/
 │   ├── pipeline.py           # Pipeline runner & Hungarian matcher
 │   ├── common.py             # Math helpers
 │   ├── visuals.py            # Spectral and simplex plotting helpers
+│   ├── plot_simplex_3d.py    # Interactive 2D/3D simplex renderer
 │   └── loaders.py            # Data loading interfaces
 ├── data/                     # Benchmark hyperspectral cubes (.mat)
 │   ├── jasper/
@@ -50,7 +51,7 @@ EMVisual-Paper/
 ├── results_cl/               # Precomputed numerical results & model weights
 │   ├── Global_Summary/       # Consolidated master_metrics.csv
 │   ├── Unmixing/             # Extracted endmembers & abundances (.npy)
-│   ├── Models/               # Trained model checkpoints (.weights.h5)
+│   ├── Models/               # Trained model checkpoints (.keras)
 │   └── Reports/              # Quantitative metrics per run (.json / .csv)
 ├── in_deep_analysis/         # In-deep spatial analysis & reviewer response
 │   └── generate_in_deep_analysis.py # ROI views and paired reconstruction RMSE maps
@@ -59,8 +60,8 @@ EMVisual-Paper/
 │   └── local_global_summary.tex     # Figure environment and short explanation
 ├── main.tex                  # Draft manuscript integrating both analysis fragments
 └── paper_figures/            # Paper figures, tables, and generator scripts
-    ├── generate_paper_plots.py      # Pareto front, heatmap, spectral comparison
-    ├── generate_reconstructions.py  # Error heatmaps & reconstructed cubes
+    ├── generate_paper_plots.py      # Efficiency scatter, heatmap, spectral comparison
+    ├── generate_reconstructions.py  # Reconstruction error maps
     ├── table/
     │   └── table_metrics.tex        # LaTeX quantitative results table
 ```
@@ -92,6 +93,13 @@ pip install -r requirements.txt
 ## 📊 Reproducing Paper Figures & Tables
 
 All numerical outputs required to generate the paper figures are precomputed and included in `results_cl/`. You can reproduce all figures in seconds without needing a GPU:
+
+For figure reproduction only, the lightweight dependencies are sufficient:
+```bash
+python -m pip install numpy scipy pandas matplotlib pyyaml
+```
+Use the full environment above for experiments; it additionally includes
+TensorFlow, scikit-learn, pysptools, and Plotly for the interactive simplex views.
 
 ### 1. Generate Efficiency Frontier, Heatmaps & Spectral Comparisons
 ```bash
