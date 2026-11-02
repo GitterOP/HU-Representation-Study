@@ -1,4 +1,4 @@
-# EMBase: Benchmark and Unmixing Suite for Hyperspectral Imaging
+# Benchmark and Unmixing Suite for Hyperspectral Imaging
 
 Official code and reproduction suite for the paper comparing deep latent representations and classical dimensionality reduction methods for hyperspectral linear unmixing.
 
