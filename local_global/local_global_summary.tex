@@ -1,0 +1,13 @@
+% Include from the project root; requires \usepackage{graphicx}.
+% \input{local_global/local_global_summary.tex}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{local_global/local_global_summary.png}
+    \caption{Agreement between global reconstruction, local reconstruction, and endmember fidelity.
+    Bar labels report matching regions out of all material regions; each region comprises
+    pixels sharing the dominant ground-truth material. The right column identifies the
+    method with the lowest mean endmember SAD.}
+    \label{fig:local_global_summary}
+\end{figure}
+
+Figure~\ref{fig:local_global_summary} contrasts scene-level reconstruction with material-level preservation. The fractions of material regions where the global RMSE winner also minimizes local RMSE are 1/3 in Samson, 1/4 in Jasper Ridge, and 2/4 in Urban. In Samson, AE-Patch has the lowest mean endmember SAD, despite DINO achieving the lowest global RMSE. Thus, global reconstruction quality alone does not establish uniform preservation of every material region and endmember.

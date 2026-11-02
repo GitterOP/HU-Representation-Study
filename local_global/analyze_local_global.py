@@ -5,6 +5,9 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
 from scipy.optimize import linear_sum_assignment
 import yaml
 
@@ -62,7 +65,7 @@ def analyze():
     return pd.DataFrame(records)
 
 
-def write_note(results, output):
+def write_outputs(results, output):
     rows = []
     for dataset, part in results.groupby('dataset', sort=False):
         winner = part.groupby('method').global_rmse.first().idxmin()
@@ -71,74 +74,89 @@ def write_note(results, output):
         count = sum(np.isclose(row.local_rmse, best_local[row.material], rtol=1e-10, atol=1e-12)
                     for row in chosen.itertuples())
         best_signatures = part.groupby('method').sad_deg.mean().idxmin()
-        rows.append('| {} | {} | {} / {} | {} |'.format(dataset, winner, count, len(chosen), best_signatures))
-    urban = results[results.dataset == 'Urban']
-    global_winner = urban.groupby('method').global_rmse.first().idxmin()
-    roof = urban[urban.material == 'Roof'].set_index('method')
-    local_winner = roof.local_rmse.idxmin()
-    if local_winner != global_winner:
-        example = ('In Urban, {} achieves the lowest global reconstruction RMSE. However, {} '
-                   'has lower RMSE in roof-dominant pixels ({:.4f} versus {:.4f}). The corresponding '
-                   'Roof endmember SAD values are {:.2f} and {:.2f} degrees, respectively. '
-                   'Thus, scene-level reconstruction quality does not guarantee the best '
-                   'preservation of every material region or endmember.').format(
-                       global_winner, local_winner, roof.loc[local_winner, 'local_rmse'],
-                       roof.loc[global_winner, 'local_rmse'], roof.loc[local_winner, 'sad_deg'],
-                       roof.loc[global_winner, 'sad_deg'])
+        rows.append(dict(dataset=dataset, winner=winner, matches=int(count), total=len(chosen),
+                         spectral_winner=best_signatures,
+                         mean_sad=float(part[part.method == best_signatures].sad_deg.mean())))
+
+    colors = {'PCA': '#475569', 'AE': '#3b82f6', 'AE-Patch': '#06b6d4',
+              'ViT': '#8b5cf6', 'MAE': '#ec4899', 'DINO': '#10b981'}
+    plt.rcParams.update({'font.family': 'DejaVu Sans', 'font.size': 10})
+    fig, ax = plt.subplots(figsize=(9.2, 3.6))
+    fig.subplots_adjust(left=0.24, right=0.72, bottom=0.27, top=0.83)
+    for index, row in enumerate(rows):
+        fraction = row['matches'] / row['total']
+        ax.barh(index, fraction, height=0.5, color=colors[row['winner']])
+        ax.text(max(fraction / 2, 0.03), index, '{matches}/{total}'.format(**row),
+                ha='center', va='center', weight='bold', color='#0f172a')
+        transform = ax.get_yaxis_transform()
+        ax.scatter(1.06, index, s=45, color=colors[row['spectral_winner']],
+                   transform=transform, clip_on=False)
+        ax.text(1.10, index, '{spectral_winner} ({mean_sad:.2f}°)'.format(**row),
+                va='center', transform=transform)
+    ax.set_yticks(range(len(rows)))
+    ax.set_yticklabels(['{dataset}\nGlobal winner: {winner}'.format(**row) for row in rows])
+    ax.set_ylim(len(rows)-0.5, -0.5)
+    ax.set_xlim(0, 1)
+    ax.set_xticks([0, .25, .5, .75, 1])
+    ax.set_xticklabels(['0%', '25%', '50%', '75%', '100%'])
+    ax.set_xlabel('Share of material regions with lowest local RMSE', labelpad=9)
+    ax.text(1.04, 1.12, 'Lowest mean SAD', weight='bold', transform=ax.transAxes)
+    ax.set_axisbelow(True)
+    ax.grid(axis='x', alpha=0.2)
+    ax.tick_params(axis='y', length=0, pad=12)
+    for side in ('left', 'right', 'top'):
+        ax.spines[side].set_visible(False)
+    fig.text(0.24, 0.04, 'Counts refer to GT-dominant material regions, not pixel area.',
+             fontsize=9, color='#475569')
+    fig.savefig(output / 'local_global_summary.png', dpi=300, bbox_inches='tight')
+    plt.close(fig)
+
+    agreements = ['{matches}/{total} in {dataset}'.format(**row) for row in rows]
+    agreements = ', '.join(agreements[:-1]) + ', and ' + agreements[-1]
+    differences = [row for row in rows if row['winner'] != row['spectral_winner']]
+    if differences:
+        example = ('In {dataset}, {spectral_winner} has the lowest mean endmember SAD, '
+                   'despite {winner} achieving the lowest global RMSE. ').format(**differences[0])
     else:
-        example = ('In Urban, {} has the lowest reconstruction RMSE both globally and in '
-                   'roof-dominant pixels. The table distinguishes this local agreement from '
-                   'mean endmember fidelity.').format(global_winner)
-    note = '''# Relación entre reconstrucción global, regiones y endmembers
+        example = 'Global RMSE and mean SAD winners coincide across these scenes. '
+    paragraph = ('Figure~\\ref{fig:local_global_summary} contrasts scene-level reconstruction '
+                 'with material-level preservation. The fractions of material regions where '
+                 'the global RMSE winner also minimizes local RMSE are ' + agreements + '. ' + example +
+                 'Thus, global reconstruction quality alone does not establish uniform '
+                 'preservation of every material region and endmember.')
+    tex = r"""% Include from the project root; requires \usepackage{graphicx}.
+% \input{local_global/local_global_summary.tex}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{local_global/local_global_summary.png}
+    \caption{Agreement between global reconstruction, local reconstruction, and endmember fidelity.
+    Bar labels report matching regions out of all material regions; each region comprises
+    pixels sharing the dominant ground-truth material. The right column identifies the
+    method with the lowest mean endmember SAD.}
+    \label{fig:local_global_summary}
+\end{figure}
 
-Este análisis responde una pregunta: ¿el ganador global también gana en cada
-material y en la fidelidad media de las firmas? Se reutilizan los resultados
-existentes, sin entrenar modelos ni generar figuras adicionales.
-
-## Tabla propuesta para el paper
-
-| Dataset | Lowest global RMSE | Material regions also won | Lowest mean SAD |
-| --- | --- | --- | --- |
-'''+ '\n'.join(rows) + '''
-
-Cada región reúne todos los píxeles donde un material tiene la mayor abundancia
-GT. La tercera columna cuenta materiales, no porcentaje de píxeles; los empates
-locales también cuentan como coincidencias. La última columna compara el SAD
-promedio de los endmembers, no exige ganar en cada firma individual.
-
-## Párrafo ilustrativo para el paper
-
-'''+ example + '''
-
-## Reproducción y datos
-
-Desde la raíz del repositorio: `python local_global/analyze_local_global.py`.
-También funciona desde otra carpeta usando la ruta completa del script.
-Dependencias: NumPy, pandas, SciPy y PyYAML del entorno del proyecto.
-
-`material_results.csv` contiene los seis métodos para los 11 materiales de las
-tres escenas (66 filas): dataset, método, material, número de píxeles, RMSE
-global, RMSE local y SAD en grados. El RMSE global se repite en las filas de los
-materiales del mismo método; no son observaciones globales independientes.
-
-El script verifica RMSE global y mSAD frente al resumen original. Los mapas y
-curvas de `paper_figures` aportan la evidencia visual; esta carpeta no los duplica.
-
-## Notas de interpretación
-
-- RMSE es el error convencional del cubo normalizado; el CSV original lo llama
-  `rRMSE`, aunque no calcula el cociente de normas del RMSE relativo.
-- SAD compara forma espectral. Una buena media no garantiza la mejor firma de
-  cada material ni la preservación de su amplitud.
-- Son comparaciones descriptivas de los sistemas guardados. La revisión previa
-  de coherencia de escalas del GT sigue pendiente; simplificar no la corrige.
-'''
-    (output / 'README.md').write_text(note, encoding='utf-8')
+""" + paragraph + '\n'
+    (output / 'local_global_summary.tex').write_text(tex, encoding='utf-8')
+    tick = chr(96)
+    (output / 'README.md').write_text(
+        '# Resumen local–global\n\n'
+        'Ejecutar: ' + tick + 'python local_global/analyze_local_global.py' + tick + '.\n\n'
+        'Entregables: código, ' + tick + 'local_global_summary.png' + tick + ' y ' +
+        tick + 'local_global_summary.tex' + tick + ' (figura y un párrafo corto en inglés). '
+        'El CSV conserva los 66 resultados de respaldo.\n\n'
+        'Para incluirlo desde la raíz del proyecto: ' + tick +
+        '\\input{local_global/local_global_summary.tex}' + tick + '; requiere graphicx.\n\n'
+        'Las fracciones cuentan materiales, no píxeles; los empates locales cuentan como coincidencias. '
+        'RMSE es convencional, aunque el resumen original lo denomina rRMSE. '
+        'SAD compara forma espectral. La revisión previa de escalas del GT sigue pendiente.\n\n'
+        'Dependencias: NumPy, pandas, SciPy, PyYAML y Matplotlib. '
+        'El script verifica RMSE global y mSAD contra el resumen original.\n', encoding='utf-8')
 
 
 if __name__ == '__main__':
     output = Path(__file__).resolve().parent
     results = analyze()
     results.to_csv(output / 'material_results.csv', index=False)
-    write_note(results, output)
-    print('Updated material_results.csv ({} rows) and README.md.'.format(len(results)))
+    write_outputs(results, output)
+    print('Updated summary figure, LaTeX paragraph, and supporting CSV ({} rows).'.format(len(results)))
