@@ -8,6 +8,7 @@ import pandas as pd
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle
 from scipy.optimize import linear_sum_assignment
 import yaml
 
@@ -74,45 +75,58 @@ def write_outputs(results, output):
         count = sum(np.isclose(row.local_rmse, best_local[row.material], rtol=1e-10, atol=1e-12)
                     for row in chosen.itertuples())
         best_signatures = part.groupby('method').sad_deg.mean().idxmin()
+        regions = []
+        for material, values in part.groupby('material', sort=False):
+            winners = values.loc[np.isclose(values.local_rmse, values.local_rmse.min(),
+                                           rtol=1e-10, atol=1e-12), 'method'].tolist()
+            regions.append(dict(material=material, methods=winners, label=' / '.join(winners),
+                                matches_global=winner in winners))
         rows.append(dict(dataset=dataset, winner=winner, matches=int(count), total=len(chosen),
-                         spectral_winner=best_signatures,
+                         spectral_winner=best_signatures, regions=regions,
                          mean_sad=float(part[part.method == best_signatures].sad_deg.mean())))
 
     colors = {'PCA': '#475569', 'AE': '#3b82f6', 'AE-Patch': '#06b6d4',
               'ViT': '#8b5cf6', 'MAE': '#ec4899', 'DINO': '#10b981'}
     plt.rcParams.update({'font.family': 'DejaVu Sans', 'font.size': 10})
-    fig, ax = plt.subplots(figsize=(9.2, 3.6))
-    fig.subplots_adjust(left=0.24, right=0.72, bottom=0.27, top=0.83)
+    fig, ax = plt.subplots(figsize=(11, 4))
+    fig.subplots_adjust(left=0.02, right=0.98, bottom=0.04, top=0.96)
+    ax.set_xlim(-2.25, 5.75)
+    ax.set_ylim(-1.0, 2.95)
+    ax.axis('off')
+    ax.text(-0.25, 2.65, 'Scene / global RMSE winner', ha='right', weight='bold', fontsize=9.5)
+    ax.text(1.95, 2.65, 'Lowest local RMSE by dominant material', ha='center', weight='bold', fontsize=9.5)
+    ax.text(4.95, 2.65, 'Lowest mean SAD', ha='center', weight='bold', fontsize=9.5)
     for index, row in enumerate(rows):
-        fraction = row['matches'] / row['total']
-        ax.barh(index, fraction, height=0.5, color=colors[row['winner']])
-        ax.text(max(fraction / 2, 0.03), index, '{matches}/{total}'.format(**row),
-                ha='center', va='center', weight='bold', color='#0f172a')
-        transform = ax.get_yaxis_transform()
-        ax.scatter(1.06, index, s=45, color=colors[row['spectral_winner']],
-                   transform=transform, clip_on=False)
-        ax.text(1.10, index, '{spectral_winner} ({mean_sad:.2f}°)'.format(**row),
-                va='center', transform=transform)
-    ax.set_yticks(range(len(rows)))
-    ax.set_yticklabels(['{dataset}\nGlobal winner: {winner}'.format(**row) for row in rows])
-    ax.set_ylim(len(rows)-0.5, -0.5)
-    ax.set_xlim(0, 1)
-    ax.set_xticks([0, .25, .5, .75, 1])
-    ax.set_xticklabels(['0%', '25%', '50%', '75%', '100%'])
-    ax.set_xlabel('Share of material regions with lowest local RMSE', labelpad=9)
-    ax.text(1.04, 1.12, 'Lowest mean SAD', weight='bold', transform=ax.transAxes)
-    ax.set_axisbelow(True)
-    ax.grid(axis='x', alpha=0.2)
-    ax.tick_params(axis='y', length=0, pad=12)
-    for side in ('left', 'right', 'top'):
-        ax.spines[side].set_visible(False)
-    fig.text(0.24, 0.04, 'Counts refer to GT-dominant material regions, not pixel area.',
-             fontsize=9, color='#475569')
+        y = 2 - index
+        ax.text(-0.25, y+0.17, row['dataset'], ha='right', va='center', weight='bold', fontsize=11)
+        ax.text(-0.25, y-0.06, 'Global: ' + row['winner'], ha='right', va='center', fontsize=10)
+        ax.text(-0.25, y-0.29, '{matches}/{total} local matches'.format(**row),
+                ha='right', va='center', fontsize=8.5, color='#475569')
+        for column, region in enumerate(row['regions']):
+            color = matplotlib.colors.to_rgba(colors[region['methods'][0]], alpha=0.14)
+            ax.add_patch(Rectangle((column, y-0.34), 0.92, 0.68, facecolor=color,
+                edgecolor='#0f172a' if region['matches_global'] else '#cbd5e1',
+                linewidth=2.2 if region['matches_global'] else 0.7))
+            ax.text(column+0.46, y+0.13, region['material'], ha='center', va='center', fontsize=10)
+            ax.text(column+0.46, y-0.12, region['label'], ha='center', va='center', fontsize=9.5,
+                    weight='bold' if region['matches_global'] else 'normal', color='#0f172a')
+        ax.scatter(4.43, y+0.10, s=40, color=colors[row['spectral_winner']])
+        ax.text(4.60, y+0.10, row['spectral_winner'], va='center', fontsize=10.5)
+        ax.text(4.60, y-0.16, '{mean_sad:.2f}°'.format(**row), va='center', fontsize=9.5, color='#475569')
+    ax.add_patch(Rectangle((0, -0.85), 0.20, 0.16, fill=False, edgecolor='#0f172a', linewidth=2.2))
+    ax.text(0.32, -0.77, 'Bold outline: regional winner matches the global RMSE winner.',
+            va='center', fontsize=9, color='#475569')
     fig.savefig(output / 'local_global_summary.png', dpi=300, bbox_inches='tight')
     plt.close(fig)
 
-    agreements = ['{matches}/{total} in {dataset}'.format(**row) for row in rows]
-    agreements = ', '.join(agreements[:-1]) + ', and ' + agreements[-1]
+    exceptions = [(row, region) for row in reversed(rows) for region in reversed(row['regions'])
+                  if not region['matches_global']]
+    local_example = ''
+    if exceptions:
+        row, region = exceptions[0]
+        local_example = ('In {}, {} leads globally, whereas {} achieves the lowest local RMSE '
+                         'in {}-dominant pixels. ').format(
+                             row['dataset'], row['winner'], region['label'], region['material'].lower())
     differences = [row for row in rows if row['winner'] != row['spectral_winner']]
     if differences:
         example = ('In {dataset}, {spectral_winner} has the lowest mean endmember SAD, '
@@ -120,8 +134,7 @@ def write_outputs(results, output):
     else:
         example = 'Global RMSE and mean SAD winners coincide across these scenes. '
     paragraph = ('Figure~\\ref{fig:local_global_summary} contrasts scene-level reconstruction '
-                 'with material-level preservation. The fractions of material regions where '
-                 'the global RMSE winner also minimizes local RMSE are ' + agreements + '. ' + example +
+                 'with material-specific preservation. ' + local_example + example +
                  'Thus, global reconstruction quality alone does not establish uniform '
                  'preservation of every material region and endmember.')
     tex = r"""% Include from the project root; requires \usepackage{graphicx}.
@@ -130,9 +143,9 @@ def write_outputs(results, output):
     \centering
     \includegraphics[width=\linewidth]{local_global/local_global_summary.png}
     \caption{Agreement between global reconstruction, local reconstruction, and endmember fidelity.
-    Bar labels report matching regions out of all material regions; each region comprises
-    pixels sharing the dominant ground-truth material. The right column identifies the
-    method with the lowest mean endmember SAD.}
+    Each block names a material and the method attaining the lowest RMSE in its
+    dominant ground-truth region. Bold outlines identify agreement with the global
+    RMSE winner. The right column reports the lowest mean endmember SAD.}
     \label{fig:local_global_summary}
 \end{figure}
 
@@ -147,7 +160,9 @@ def write_outputs(results, output):
         'El CSV conserva los 66 resultados de respaldo.\n\n'
         'Para incluirlo desde la raíz del proyecto: ' + tick +
         '\\input{local_global/local_global_summary.tex}' + tick + '; requiere graphicx.\n\n'
-        'Las fracciones cuentan materiales, no píxeles; los empates locales cuentan como coincidencias. '
+        'Cada bloque identifica un material y su ganador local; el contorno grueso señala '
+        'coincidencia con el ganador global. Los conteos se refieren a materiales, no píxeles; '
+        'los empates locales también cuentan como coincidencias. '
         'RMSE es convencional, aunque el resumen original lo denomina rRMSE. '
         'SAD compara forma espectral. La revisión previa de escalas del GT sigue pendiente.\n\n'
         'Dependencias: NumPy, pandas, SciPy, PyYAML y Matplotlib. '
