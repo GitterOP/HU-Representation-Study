@@ -44,3 +44,26 @@ ENV/
 # Logs and cache
 *.log
 .cache/
+
+# AI Agent Rules and Local Tooling
+.agents/
+.codegraph/
+
+# Generated figures (reproducible via scripts)
+*.png
+
+# Source diagram: no plotting script regenerates this asset.
+!paper_figures/Met.png
+
+# Local LaTeX compilation outputs
+*.aux
+*.bcf
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.run.xml
+*.synctex.gz
+*.toc
+*.out
+/main.pdf

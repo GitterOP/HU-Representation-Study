@@ -1,0 +1,39 @@
+% Include from the project root; requires graphicx.
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=0.98\textwidth]{in_deep_analysis/fig_spatial_error_analysis.png}
+    \caption{Selected spatial reconstruction comparisons for (a) Samson, (b) Jasper Ridge,
+    and (c) Urban. Columns show the full pseudo-RGB scene and ROI, the dominant
+    ground-truth material in the ROI, the competing system, and DINO. Error maps
+    show conventional pixelwise spectral RMSE. Each pair shares the same color
+    limits within its row; limits may differ between rows. Annotations report
+    the arithmetic mean of pixelwise RMSE within the ROI.}
+    \label{fig:spatial_error_analysis}
+\end{figure*}
+
+\subsection{Spatial Error Localization}
+\label{subsec:spatial_error_tradeoffs}
+
+Column~3 uses PCA for Samson and Urban as the conventional linear reference.
+MAE is used for Jasper Ridge because it has the lowest global reconstruction
+RMSE among the evaluated systems in that scene. These selected comparisons
+illustrate spatial differences; they do not isolate architectural or training
+mechanisms, and do not establish a ranking of all systems within each ROI.
+
+In Samson, the selected shoreline, canopy, and soil ROI has mean pixelwise
+RMSE of $0.141$ for PCA and $0.088$ for DINO, a $37.8\%$ reduction. In Jasper
+Ridge, MAE has lower mean pixelwise RMSE than DINO ($0.026$ versus $0.063$),
+while DINO reaches a maximum pixelwise RMSE of $0.602$ in this ROI. The
+matched Road endmember also differs substantially: its SAD is $2.71^\circ$
+for MAE and $32.45^\circ$ for DINO. In the selected Urban ROI, DINO has mean
+pixelwise RMSE of $0.095$, compared with $0.302$ for PCA, a $68.5\%$ reduction.
+These ROI averages differ from the pooled reconstruction RMSE over a full cube.
+
+The transformer inputs use $3\times3$ spatial neighborhoods. DINO's student
+also receives center-token occlusion during training and uses a learned CLS
+representation. These design choices motivate hypotheses about sensitivity
+to local context, but the maps alone cannot demonstrate that the CLS token
+averages road spectra, that road pixels cease to be latent extreme points,
+or that self-distillation causes the observed errors. The results support a
+scene- and material-dependent comparison, consistent with the separate
+local--global summary, rather than a universal advantage for any architecture.

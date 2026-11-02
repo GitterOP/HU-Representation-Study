@@ -11,7 +11,7 @@ This repository provides an autonomous, reproducible benchmark evaluating 6 repr
 - **Methods evaluated:**
   - `PCA` (Principal Component Analysis - Baseline)
   - `AE` (Standard Autoencoder)
-  - `AE_PATCH` (Patch-based Autoencoder)
+  - `AE-Patch` (Patch-based Autoencoder)
   - `ViT` (Vision Transformer autoencoder)
   - `MAE` (Masked Autoencoder)
   - `DINO` (Self-distillation with no labels)
@@ -52,12 +52,17 @@ EMVisual-Paper/
 │   ├── Unmixing/             # Extracted endmembers & abundances (.npy)
 │   ├── Models/               # Trained model checkpoints (.weights.h5)
 │   └── Reports/              # Quantitative metrics per run (.json / .csv)
+├── in_deep_analysis/         # In-deep spatial analysis & reviewer response
+│   └── generate_in_deep_analysis.py # ROI views and paired reconstruction RMSE maps
+├── local_global/             # Compact global-to-material comparison
+│   ├── analyze_local_global.py      # Reproduce the figure and supporting CSV
+│   └── local_global_summary.tex     # Figure environment and short explanation
+├── main.tex                  # Draft manuscript integrating both analysis fragments
 └── paper_figures/            # Paper figures, tables, and generator scripts
     ├── generate_paper_plots.py      # Pareto front, heatmap, spectral comparison
     ├── generate_reconstructions.py  # Error heatmaps & reconstructed cubes
     ├── table/
     │   └── table_metrics.tex        # LaTeX quantitative results table
-    └── *.png                        # Rendered publication figures (300 DPI)
 ```
 
 ---
@@ -93,8 +98,8 @@ All numerical outputs required to generate the paper figures are precomputed and
 python paper_figures/generate_paper_plots.py
 ```
 Outputs generated in `paper_figures/`:
-* `frontera_eficiencia.png` — Multi-objective Pareto frontier ($mSAD$ vs $aRMSE$).
-* `heatmap_rendimiento.png` — Normalized performance matrix across all methods.
+* `frontera_eficiencia.png` — Reconstruction RMSE versus total execution time.
+* `heatmap_rendimiento.png` — Reconstruction RMSE across all methods and datasets.
 * `08_endmembers_vs_gt_samson.png` — Extracted endmembers vs Ground Truth (Samson).
 * `08_endmembers_vs_gt_jasper.png` — Extracted endmembers vs Ground Truth (Jasper Ridge).
 * `08_endmembers_vs_gt_urban.png` — Extracted endmembers vs Ground Truth (Urban).
@@ -108,9 +113,35 @@ Outputs generated in `paper_figures/`:
 * `reconstruccion_jasper_ridge.png` — Error map comparison with unified color scale.
 * `reconstruccion_urban.png` — Error map comparison with unified color scale.
 
-### 3. LaTeX Table
-The quantitative comparison table is available in:
-* `paper_figures/table/table_metrics.tex`
+### 3. Generate Selected ROI Comparisons
+```bash
+python in_deep_analysis/generate_in_deep_analysis.py
+```
+Outputs generated in `in_deep_analysis/`:
+* `fig_spatial_error_analysis.png` — Selected reconstruction error comparisons, with shared color limits within each dataset's pair.
+
+The accompanying `spatial_error_discussion.tex` describes the figure and explains
+the competitor selection. These are system comparisons, not architectural ablations.
+
+### 4. Generate the Compact Local–Global Summary
+```bash
+python local_global/analyze_local_global.py
+```
+This creates `local_global_summary.png`, its LaTeX figure and short explanatory
+paragraph, and the small supporting `material_results.csv`.
+
+### 5. LaTeX Tables & Discussion
+* `paper_figures/table/table_metrics.tex` — Main quantitative benchmark table.
+* `in_deep_analysis/spatial_error_discussion.tex` — Discussion text and figure environment for spatial error analysis.
+* `local_global/local_global_summary.tex` — Material-specific winners compared with scene-level winners.
+
+`main.tex` includes both discussion fragments and reads figures from
+`paper_figures/`. Run the generators before compiling. Generated PNGs stay local;
+`paper_figures/Met.png` is tracked because it is a source diagram without a generator.
+
+The manuscript is a draft: its referenced `sample.bib` must be supplied. The
+historical CSV field `rRMSE` contains conventional reconstruction RMSE, so the
+manuscript's relative-RMSE equation still needs reconciliation before submission.
 
 ---
 
