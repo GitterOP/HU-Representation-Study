@@ -1,4 +1,0 @@
-dataset,reference_mixture_rmse,reference_mixture_relative_rmse,reference_mixture_sam_deg,image_normalization_divisor,reference_signatures_rescaled
-Samson,0.367804973621424,1.5054071631539996,2.318237463891684,1.0,False
-Jasper Ridge,0.04686006500410942,0.16143439598073778,6.595895173402688,5437.0,False
-Urban,0.08481128601753836,0.41706557603131417,4.312332869018227,1000.0,False

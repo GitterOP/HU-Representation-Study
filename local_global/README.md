@@ -1,74 +1,45 @@
-# Local, global, and endmember preservation
+# Relación entre reconstrucción global, regiones y endmembers
 
-This folder answers whether low global reconstruction error also implies good
-preservation of critical spatial regions, material abundances, and endmember
-signatures. It analyzes existing outputs; it does not train or tune models.
+Este análisis responde una pregunta: ¿el ganador global también gana en cada
+material y en la fidelidad media de las firmas? Se reutilizan los resultados
+existentes, sin entrenar modelos ni generar figuras adicionales.
 
-Run from any directory with the project's scientific Python environment:
+## Tabla propuesta para el paper
 
-```bash
-python local_global/analyze_local_global.py
-```
+| Dataset | Lowest global RMSE | Material regions also won | Lowest mean SAD |
+| --- | --- | --- | --- |
+| Samson | DINO | 1 / 3 | AE-Patch |
+| Jasper Ridge | MAE | 1 / 4 | MAE |
+| Urban | DINO | 2 / 4 | DINO |
 
-The script resolves the project root from its own location. Optional arguments
-`--project-root PATH` and `--output-dir PATH` allow analysis of another checkout
-without modifying its inputs. Dependencies: NumPy, SciPy, pandas, Matplotlib,
-PyYAML. All output files are regenerated in this folder by default.
+Cada región reúne todos los píxeles donde un material tiene la mayor abundancia
+GT. La tercera columna cuenta materiales, no porcentaje de píxeles; los empates
+locales también cuentan como coincidencias. La última columna compara el SAD
+promedio de los endmembers, no exige ganar en cada firma individual.
 
-Read `analysis_report.md` for the Spanish findings, `discussion_draft.md` for an
-English discussion draft, and `spec.md` for the method-independent region rules
-and interpretation limits. No existing LaTeX file is edited.
+## Párrafo ilustrativo para el paper
 
-Main figures:
-- `global_local_endmember.png/.pdf`: global reconstruction error versus boundary
-  reconstruction, boundary abundance error, and mean endmember SAD.
-- `preservation_rankings.png/.pdf`: rank agreement across complementary criteria.
-- `material_preservation_rankings.png/.pdf`: global rankings versus each
-  dominant-material region and each individual endmember signature.
-- `regions_DATASET.png`: reference material layout, boundary band, mixture
-  structure, and the common critical mask.
-- `spatial_errors_DATASET.png`: all six systems with fixed reconstruction and
-  abundance color scales across methods and datasets.
-- `endmember_signatures_DATASET.png`: raw and peak-normalized matched signatures.
+In Urban, DINO achieves the lowest global reconstruction RMSE. However, AE-Patch has lower RMSE in roof-dominant pixels (0.1037 versus 0.1315). The corresponding Roof endmember SAD values are 5.39 and 11.47 degrees, respectively. Thus, scene-level reconstruction quality does not guarantee the best preservation of every material region or endmember.
 
-Tables:
-- `global_metrics.csv`: conventional/relative reconstruction RMSE, SAM, mean and
-  worst SAD, abundance aggregation variants, error tails, macro material RMSE.
-- `region_metrics.csv`: identical masks across methods; local metrics and squared
-  error shares. Overlapping mask shares must not be added.
-- `endmember_metrics.csv`, `material_connections.csv`,
-  `material_region_comparisons.csv`: material-wise links among
-  signatures, local reconstruction, and abundance accuracy.
-- `rankings.csv`, `rank_correlations.csv`, `winner_agreement.csv`: descriptive
-  comparisons within each scene, using six systems rather than pooled pixels.
-- `sensitivity.csv`: boundary widths and mixture cutoffs.
-- `metric_audit.csv`: recomputed results against the source summary.
-- `reference_consistency.csv`: reconstruction from reference signatures and
-  abundances under the repository's existing scales, without calibration.
-- `winner_error_localization.csv`: mask area versus squared-error contribution
-  for the best global reconstruction system in each dataset.
-- `region_definitions.csv`, `reference_masks_DATASET.npz`: exact mask coverage.
-- `provenance.json`: input hashes, dependency versions, shared color limits.
+## Reproducción y datos
 
-Important definitions: the source CSV calls conventional reconstruction RMSE
-`rRMSE`. The actual norm-relative error is exported separately as `relative_rmse`.
-The source abundance `aRMSE` is the mean of pixelwise RMSE, which differs from
-pooled abundance RMSE. This analysis preserves both definitions explicitly.
+Desde la raíz del repositorio: `python local_global/analyze_local_global.py`.
+También funciona desde otra carpeta usando la ruta completa del script.
+Dependencias: NumPy, pandas, SciPy y PyYAML del entorno del proyecto.
 
-The reference mixing model is also checked directly. Reference signatures and
-abundances do not exactly reproduce the observed cube under the loaded scales,
-especially in Samson. Interpret disagreement between evaluation targets subject
-to this benchmark limitation; do not attribute it solely to learned features.
+`material_results.csv` contiene los seis métodos para los 11 materiales de las
+tres escenas (66 filas): dataset, método, material, número de píxeles, RMSE
+global, RMSE local y SAD en grados. El RMSE global se repite en las filas de los
+materiales del mismo método; no son observaciones globales independientes.
 
-All displayed method names follow PCA, AE, AE-Patch, ViT, MAE, DINO. Figure text
-is in English. These are descriptive results for the saved systems; they do not
-identify architectural causes or establish significance across repeated runs.
+El script verifica RMSE global y mSAD frente al resumen original. Los mapas y
+curvas de `paper_figures` aportan la evidencia visual; esta carpeta no los duplica.
 
-Run the synthetic sanity checks with:
+## Notas de interpretación
 
-```bash
-python -m unittest discover -s local_global -p 'test_*.py' -v
-```
-
-These checks cover endmember permutation, the possibility of exact reconstruction
-with incorrect signatures/abundances, and disjoint spatial error decomposition.
+- RMSE es el error convencional del cubo normalizado; el CSV original lo llama
+  `rRMSE`, aunque no calcula el cociente de normas del RMSE relativo.
+- SAD compara forma espectral. Una buena media no garantiza la mejor firma de
+  cada material ni la preservación de su amplitud.
+- Son comparaciones descriptivas de los sistemas guardados. La revisión previa
+  de coherencia de escalas del GT sigue pendiente; simplificar no la corrige.
